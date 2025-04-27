@@ -5,6 +5,8 @@ This project implements a two-part integrated system:
 2. A Text-to-SQL system for querying a hospital database using natural language
 3. A Streamlit application that integrates both components into a user-friendly conversational interface
 
+All language models in this application are served locally with Ollama. No external API calls are made to services like OpenAI or Anthropic, ensuring complete privacy and offline operation.
+
 ## Datasets
 
 ### RAG Posters
@@ -21,6 +23,8 @@ Before getting started, make sure you have the following installed:
 - [Docker](https://www.docker.com/get-started) for running Weaviate
 - [Ollama](https://ollama.com/download) for local language models
 - Python 3.8+ with pip
+
+For detailed instructions on setting up Weaviate locally, refer to the [Weaviate Quickstart Guide](https://weaviate.io/developers/weaviate/quickstart/local).
 
 Download the required Ollama models by running:
 
@@ -61,7 +65,7 @@ pip install -r requirements.txt
 The project is organized into two main components:
 
 ```
-5153 langgraph E drive v2/
+5153-2025-final-proj-gp2/
 ├── weaviate-rag-loader/       # RAG component for processing and indexing PDFs
 │   ├── data/                  # PDF files to be processed
 │   ├── docker-compose.yml     # Weaviate configuration
@@ -116,7 +120,7 @@ cd weaviate-rag-loader
 python ollama_poster_chunker_by_sections.py
 ```
 
-or
+and
 
 ```bash
 python ollama_poster_chunker_by_full_poster.py
