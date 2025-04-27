@@ -84,7 +84,7 @@ The project is organized into two main components:
     ├── requirements.txt       # Python dependencies
     ├── config.py              # Application configuration
     ├── model_config_evaluator.py  # Model evaluation tools
-    └── streamlit_app_v2.py    # Main Streamlit application
+    └── app.py    # Main Streamlit application
 ```
 
 ## Step 1: Set up Weaviate RAG System
@@ -152,7 +152,7 @@ To run the Streamlit application:
 
 ```bash
 cd langgraph-app
-streamlit run streamlit_app_v2.py
+streamlit run app.py
 ```
 
 The application will be available at http://localhost:8501 in your web browser.
@@ -170,7 +170,7 @@ You can configure which model to use in the `config.py` file in the main folder.
 
 ### 2.4 Key Files in langgraph-app
 
-- `streamlit_app_v2.py`: Main Streamlit application with UI and session management
+- `app.py`: Main Streamlit application with UI and session management
 - `config.py`: Configuration settings for the application
 - `agents/`: Directory containing LangGraph agent definitions
 - `utils/`: Utility functions for data processing and API interactions
