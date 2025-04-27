@@ -1,0 +1,18 @@
+/5153-lang-aftershock
+/5153-aftershock-v2
+../5153-aftershock-v2/
+/old files
+.env
+5253-220425-mockup.png
+langgraph_rag_graph_v3.png
+sql_query_agent_graph.png
+agentic_rag_v2_old.py
+table_loader_old.py
+test_poster_qa.py
+poster_qa_old.py
+poster_qa_roy.py
+**/debug/
+**/chunk_uploads.ipynb
+**/old/
+**/old_files/
+**/logs/
