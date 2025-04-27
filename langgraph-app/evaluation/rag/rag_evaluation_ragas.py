@@ -267,7 +267,7 @@ def calculate_metrics_with_llm(llm_response: str, retrieved_chunks: list[str], q
             return 0.0, 0.0
     
     # For full evaluation with real chunks
-    # Build a single prompt to handle all tasks at once
+    # Build a single prompt to handle faithfulness calculation
     # Allow up to 15 chunks for evaluation
     max_chunks = min(15, len(retrieved_chunks))
     consolidated_chunks = "\n\n".join([
@@ -276,15 +276,22 @@ def calculate_metrics_with_llm(llm_response: str, retrieved_chunks: list[str], q
     ])
     
     # This prompt will ask the LLM to:
-    # 1. Score faithfulness for all chunks
-    # 2. Generate questions for relevancy assessment
-    prompt = f"""You are evaluating an LLM response. Complete ALL these tasks:
+    # 1. Extract claims from the response
+    # 2. Check if each claim is supported by context
+    # 3. Generate questions for relevancy assessment
+    prompt = f"""You are evaluating an LLM response. Complete ALL these tasks accurately:
 
-TASK 1: Rate the faithfulness of this response against each context chunk on a scale of 0 to 1.
+TASK 1: Faithfulness Evaluation
+1. Extract all factual claims from the LLM response.
+2. For each claim, determine if it is supported by the provided context chunks.
+3. Calculate a faithfulness score: (number of supported claims) / (total number of claims)
+
+TASK 2: Generate questions for evaluating relevance to the original query.
+
 CONTEXT CHUNKS:
 {consolidated_chunks}
 
-RESPONSE:
+LLM RESPONSE:
 {llm_response}
 
 QUERY:
@@ -292,7 +299,14 @@ QUERY:
 
 Provide JSON output with the following format:
 {{
-  "faithfulness_scores": [<score_for_chunk_1>, <score_for_chunk_2>, ...],
+  "claims": [
+    {{
+      "claim": "<claim_text>",
+      "supported": true/false
+    }},
+    ...
+  ],
+  "faithfulness_score": <ratio_of_supported_claims>,
   "generated_questions": [
     "<question_1>",
     "<question_2>",
@@ -318,16 +332,18 @@ The questions should be based on the response content and help evaluate if the r
             try:
                 evaluation_data = json.loads(json_str)
                 
-                # Extract faithfulness scores
-                faithfulness_scores = evaluation_data.get("faithfulness_scores", [])
-                if not faithfulness_scores or len(faithfulness_scores) != max_chunks:
-                    # Try to extract scores with regex if JSON doesn't have correct number
-                    score_matches = re.findall(r'[0-9]\.[0-9]+|[0-9]', evaluation_str)
-                    faithfulness_scores = [float(s) for s in score_matches[:max_chunks] if 0 <= float(s) <= 1]
-                    
-                    if len(faithfulness_scores) < max_chunks:
-                        # If still not enough scores, fill with 0.5 (neutral)
-                        faithfulness_scores.extend([0.5] * (max_chunks - len(faithfulness_scores)))
+                # Extract faithfulness data
+                claims = evaluation_data.get("claims", [])
+                faithfulness_score = evaluation_data.get("faithfulness_score")
+                
+                # If faithfulness_score not provided directly, calculate from claims
+                if faithfulness_score is None and claims:
+                    supported_claims = sum(1 for claim in claims if claim.get("supported", False))
+                    total_claims = len(claims)
+                    faithfulness_score = supported_claims / total_claims if total_claims > 0 else 0.0
+                elif faithfulness_score is None:
+                    # Default if no claims extracted
+                    faithfulness_score = 0.5
                 
                 # Extract generated questions
                 generated_questions = evaluation_data.get("generated_questions", [])
@@ -348,9 +364,6 @@ The questions should be based on the response content and help evaluate if the r
                     # Truncate if too many
                     generated_questions = generated_questions[:3]
                 
-                # Calculate faithfulness score (average of scores for all chunks)
-                faithfulness_score = np.mean(faithfulness_scores) if faithfulness_scores else 0.5
-                
                 # Calculate response relevancy using the generated questions
                 query_embedding = embedding_model.embed_query(query)
                 question_embeddings = [embedding_model.embed_query(q) for q in generated_questions]
@@ -364,11 +377,9 @@ The questions should be based on the response content and help evaluate if the r
                 
             except json.JSONDecodeError:
                 print("Warning: Invalid JSON format in LLM response. Falling back to regex extraction.")
-                # Fallback: extract scores with regex
-                score_matches = re.findall(r'[0-9]\.[0-9]+|[0-9]', evaluation_str)
-                faithfulness_scores = [float(s) for s in score_matches[:max_chunks] if 0 <= float(s) <= 1]
-                if not faithfulness_scores:
-                    faithfulness_scores = [0.5] * max_chunks
+                # Extract faithfulness score
+                faithfulness_match = re.search(r'faithfulness[_\s]*score[\s:]*([0-9]\.[0-9]+|[0-9])', evaluation_str, re.IGNORECASE)
+                faithfulness_score = float(faithfulness_match.group(1)) if faithfulness_match else 0.5
                 
                 # Extract questions for relevancy
                 question_matches = []
@@ -380,9 +391,7 @@ The questions should be based on the response content and help evaluate if the r
                 if len(question_matches) < 3:
                     question_matches.extend([''] * (3 - len(question_matches)))
                 
-                # Calculate metrics
-                faithfulness_score = np.mean(faithfulness_scores)
-                
+                # Calculate response relevancy
                 query_embedding = embedding_model.embed_query(query)
                 question_embeddings = [embedding_model.embed_query(q) for q in question_matches]
                 similarity_scores = [
@@ -395,11 +404,9 @@ The questions should be based on the response content and help evaluate if the r
         
         else:
             print("Warning: Could not extract JSON from LLM response. Using fallback extraction.")
-            # Fallback: extract scores with regex
-            score_matches = re.findall(r'[0-9]\.[0-9]+|[0-9]', evaluation_str)
-            faithfulness_scores = [float(s) for s in score_matches[:max_chunks] if 0 <= float(s) <= 1]
-            if not faithfulness_scores:
-                faithfulness_scores = [0.5] * max_chunks
+            # Extract faithfulness score
+            faithfulness_match = re.search(r'faithfulness[_\s]*score[\s:]*([0-9]\.[0-9]+|[0-9])', evaluation_str, re.IGNORECASE)
+            faithfulness_score = float(faithfulness_match.group(1)) if faithfulness_match else 0.5
             
             # Extract questions for relevancy
             question_matches = []
@@ -411,9 +418,7 @@ The questions should be based on the response content and help evaluate if the r
             if len(question_matches) < 3:
                 question_matches.extend([''] * (3 - len(question_matches)))
             
-            # Calculate metrics
-            faithfulness_score = np.mean(faithfulness_scores)
-            
+            # Calculate response relevancy
             query_embedding = embedding_model.embed_query(query)
             question_embeddings = [embedding_model.embed_query(q) for q in question_matches]
             similarity_scores = [

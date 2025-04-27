@@ -14,7 +14,7 @@ The medical QI posters used in this project are publicly available from the Sing
 [https://www.singaporehealthcaremanagement.sg/Pages/Poster-Exhibition-2022.aspx](https://www.singaporehealthcaremanagement.sg/Pages/Poster-Exhibition-2022.aspx)
 
 ### Database
-The hospital database contains synthesized data (not real patient data) stored in a SQLite database file (.db). This database is used for the Text-to-SQL component to demonstrate how natural language queries can be converted to SQL and executed against structured data.
+The hospital database contains 100% synthesized data that was generated using SQL code based on mathematical distributions. All data is completely random and artificially created - NO REAL PATIENT DATA is used in any part of this project. This synthetic database is used for the Text-to-SQL component to demonstrate how natural language queries can be converted to SQL and executed against structured data.
 
 ## Prerequisites
 
@@ -41,6 +41,8 @@ ollama pull qwen2.5:32b    # 32B parameter model (requires high-end GPU)
 ```
 
 We will be running Weaviate and language models locally. We recommend using a modern computer with at least 8GB of RAM, preferably 16GB or more. For the larger models (qwen2.5:14b and qwen2.5:32b), a GPU with 16GB+ VRAM is recommended.
+
+Note that the default Ollama context window size is 2048 tokens. We extended this to 4096 tokens for better handling of longer documents and conversations. For instructions on how to modify the context window, see [this guide](https://blog.driftingruby.com/ollama-context-window/).
 
 ## Python Environment Setup
 
@@ -77,7 +79,6 @@ The project is organized into two main components:
     ├── agents/                # Agent definitions and components
     ├── database/              # SQLite database for hospital data
     ├── evaluation/            # Tools for evaluating model performance
-    ├── logs/                  # Application logs
     ├── posters/               # PDF posters for display in the app
     ├── utils/                 # Utility functions
     ├── requirements.txt       # Python dependencies
