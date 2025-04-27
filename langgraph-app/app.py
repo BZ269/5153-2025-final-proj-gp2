@@ -1143,4 +1143,4 @@ with st.sidebar:
                 st.session_state.debug_log = []
                 st.rerun()
 
-# Check if we need to rerun for UI updates
+

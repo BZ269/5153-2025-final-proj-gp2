@@ -8,45 +8,6 @@ current_year = datetime.today().year
 
 verbose = True
 
-
-### ---------------------------------------------------------------------------------
-### Try new (with time-based queries) 
-
-# query_rewrite_prompt = PromptTemplate.from_template("""
-# <ROLE>
-# You are a medical QIP retrieval specialist. Rewrite the user's query for optimal semantic search and retrieval performance.
-# Today's year is {current_year}.
-# </ROLE>
-
-# <STRATEGIES>
-# 1. Preserve action phrases: Keep instructional language ("show me", "list", "are there") when present.
-# 2. Expand terms: Add synonyms ONLY for terms already present in the query (example, "fall" → "fall prevention").
-#     - Never introduce new medical QIP concepts not mentioned in the original query.
-# 3. Handle time-based queries: 
-#     - If the query involves a time range (e.g., "past year", "in 2023"), resolve  those to actual years using today's year ({current_year}).
-#     - List all of the years in the time range (e.g. "2022 to 2024" → "2022, 2023, 2024")
-#     - Do not add time context unless it is clearly stated.
-# 4. Keep the rewritten query concise and directly usable for retrieval.
-# </STRATEGIES>
-
-# <INPUT>
-# Original query: {query}
-# </INPUT>
-
-# <INSTRUCTIONS>
-# - Output ONLY the rewritten query, no explanations.
-# - Use natural language (no bullet points/JSON).
-# - Never repeat the original query verbatim.
-# - Expand terms ONLY when the root term exists in the original query.
-# - Never add new concepts or topics not mentioned originally.
-# - Never add constraints (e.g. time range) that are not mentioned in the originals query.
-# - Never include notes, instructions, or other text.
-# - No new information.
-# """)
-
-### ---------------------------------------------------------------------------------
-### Try new (with time-based queries) 
-
 query_rewrite_prompt = PromptTemplate.from_template("""
 <ROLE>
 You are a medical QIP retrieval specialist. Rewrite the user's query for optimal semantic search and retrieval performance.
