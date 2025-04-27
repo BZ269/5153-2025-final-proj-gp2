@@ -1,0 +1,10 @@
+SELECT COUNT(*) AS incident_count  FROM patient_incidents;	bt5153_gp
+SELECT COUNT(*) AS count_no_treatment_plan FROM Inpatient_Cases WHERE treatment_plan IS NULL OR treatment_plan = '';	bt5153_gp
+SELECT      hospital_id,     AVG(bill_amount) AS avg_billing_amount FROM      Outpatient_Cases WHERE      bill_amount IS NOT NULL GROUP BY      hospital_id;	bt5153_gp
+SELECT      CAST(SUM(CASE WHEN outcomes = 'Successful' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) AS success_percentage FROM      surgery_metrics;	bt5153_gp
+SELECT pwt.hospital_id, AVG(julianday(pwt.consultation_end_time) - julianday(pwt.consultation_start_time)) * 24 * 60 AS avg_consultation_minutes FROM patient_wait_times pwt GROUP BY pwt.hospital_id;	bt5153_gp
+SELECT COUNT(i.patient_id) AS num_cases FROM Inpatient_Cases i JOIN surgery_metrics s ON i.patient_id = s.patient_id WHERE i.follow_up_date IS NOT NULL;	bt5153_gp
+SELECT COUNT(*) AS total_count FROM patient_incidents ), incidents_over_60 AS (     SELECT ic.patient_id     FROM Inpatient_Cases ic     JOIN patient_incidents pi ON ic.patient_id = pi.patient_id     WHERE pi.age > 60 ), required_surgeries AS (     SELECT sm.patient_id     FROM surgery_metrics sm     INNER JOIN incidents_over_60 ioo ON sm.patient_id = ioo.patient_id ) SELECT      (COUNT(ioo.patient_id) * 100.0 / ti.total_count) AS percentage_over_60,     CASE WHEN rs.patient_id IS NOT NULL THEN 'Yes' ELSE 'No' END AS required_surgeries FROM incidents_over_60 ioo, total_incidents ti LEFT JOIN required_surgeries rs ON ioo.patient_id = rs.patient_id;	bt5153_gp
+SELECT department, AVG(duration) AS avg_duration     FROM surgery_metrics     GROUP BY department ) SELECT department FROM AvgDuration ORDER BY avg_duration DESC LIMIT 3;	bt5153_gp
+SLECT * FROM *;	bt5153_gp
+SELECT      o.department,      AVG(julianday(p.consultation_start_time) - julianday(p.registration_time)) AS avg_wait_time FROM      Outpatient_Cases o JOIN      patient_wait_times p ON o.patient_id = p.patient_id GROUP BY o.department;	bt5153_gp

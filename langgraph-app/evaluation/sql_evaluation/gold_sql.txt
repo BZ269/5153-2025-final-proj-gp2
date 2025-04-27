@@ -1,0 +1,10 @@
+SELECT COUNT(*) FROM patient_incidents;	bt5153_gp
+SELECT COUNT(*) FROM Inpatient_Cases WHERE treatment_plan IS NULL;	bt5153_gp
+SELECT hospital_id, AVG(bill_amount) FROM outpatient_cases GROUP BY hospital_id;	bt5153_gp
+SELECT ROUND(COUNT(CASE WHEN outcomes = 'Successful' THEN 1 END) *100 / COUNT(*),2) FROM surgery_metrics;	bt5153_gp
+SELECT hospital_id, AVG( JULIANDAY(pwt.consultation_end_time) - JULIANDAY(pwt.consultation_start_time) ) * 24 * 60 AS avg_consultation_minutes FROM patient_wait_times pwt GROUP BY hospital_id;	bt5153_gp
+SELECT COUNT(*) FROM inpatient_cases INNER JOIN surgery_metrics ON inpatient_cases.patient_id = surgery_metrics.patient_id WHERE inpatient_cases.follow_up_date IS NOT NULL;	bt5153_gp
+SELECT COUNT(DISTINCT s.patient_id) / NULLIF(COUNT(DISTINCT pi.patient_id), 0) * 100 AS percentage_elder_long_surgery FROM patient_incidents pi JOIN surgery_metrics s ON pi.patient_id = s.patient_id WHERE pi.age > 60;	bt5153_gp
+SELECT sm.hospital, sm.department, AVG(sm.duration) AS avg_surgery_duration_minutes, AVG(sm.length_of_stay) AS avg_length_of_stay_days, COUNT(sm.surgery_id) AS surgery_count FROM surgery_metrics sm GROUP BY sm.hospital, sm.department ORDER BY avg_surgery_duration_minutes DESC, avg_length_of_stay_days DESC;	bt5153_gp
+SELECT ow.hospital_id, oc.department, ROUND(AVG((JULIANDAY(consultation_start_time) - JULIANDAY(registration_time)) * 24 * 60), 2) AS avg_wait_time_minutes, COUNT(ow.patient_id) AS patient_count FROM patient_wait_times ow JOIN Outpatient_Cases oc ON ow.patient_id = oc.patient_id GROUP BY ow.hospital_id, oc.department ORDER BY avg_wait_time_minutes DESC LIMIT 10;	bt5153_gp
+SELECT  sm.hospital, sm.department, COUNT(sm.surgery_id) AS total_surgeries, SUM(sm.readmission_within_30_days) AS readmissions_within_30_days FROM surgery_metrics sm JOIN patient_incidents pi ON sm.patient_id = pi.patient_id WHERE pi.age > 60 GROUP BY sm.hospital, sm.department ORDER BY SUM(sm.readmission_within_30_days) / COUNT(sm.surgery_id) DESC LIMIT 10;	bt5153_gp

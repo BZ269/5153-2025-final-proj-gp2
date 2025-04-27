@@ -1,0 +1,58 @@
+query_id,query_text,sql_query,query_result,answer,response_time_seconds,error_messages
+1,How many patients incidents are there?, SELECT COUNT(*) AS number_of_entries FROM patient_incidents;,"[(100,)]","The patient_incidents table contains 100 entries, as indicated by the SQL result from the query that counted all rows in this specific table. The COUNT(*) function was used to determine the total number of rows, returning a single value labeled as 'number_of_entries'.",17.23,None
+2,How many inpatient cases had no treatment plan?, SELECT COUNT(*) AS num_cases FROM Inpatient_Cases WHERE treatment_plan IS NULL OR treatment_plan = '';,"[(394,)]","There are 394 inpatient cases where the `treatment_plan` is either NULL or an empty string, based on the data from the `Inpatient_Cases` table using the `treatment_plan` column.",21.4,None
+3,What is the average billing amount from each hospital's outpatient cases?," SELECT      hospital_id,     AVG(bill_amount) AS avg_billing_amount FROM      Outpatient_Cases GROUP BY      hospital_id;","[('CGH ', 234.41785000000016), ('KKH ', 291.971925), ('SGH ', 307.05915000000016), ('SHP ', 125.64142499999998), ('SKH ', 241.24664999999993)]","Based on the SQL result from the `Outpatient_Cases` table, the average billing amount for each hospital's outpatient cases is as follows:
+
+- CGH: $234.42
+- KKH: $291.97
+- SGH: $307.06
+- SHP: $125.64
+- SKH: $241.25
+
+The data was derived from the `hospital_id` and `bill_amount` columns in the `Outpatient_Cases` table, where the average billing amount (`AVG(bill_amount)`) is calculated for each unique hospital ID (`GROUP BY hospital_id`).",25.95,None
+4,What is the percentage of successful surgeries rount off to second decimal?," SELECT      ROUND((SUM(CASE WHEN outcomes = 'Successful' THEN 1 ELSE 0 END) / COUNT(*)) * 100, 2) AS success_percentage FROM      surgery_metrics;","[(0.0,)]","Based on the data from the `surgery_metrics` table using the `outcomes` column, the percentage of successful surgeries is 0.0%, indicating that there were no successful outcomes recorded in the dataset provided. The calculation was made by summing up all entries marked as 'Successful' and dividing it by the total number of records, then multiplying by 100 to get a percentage, rounded to two decimal places.",23.94,None
+5,What is the average consultation time in minutes for each hospital's patient?," SELECT      pwt.hospital_id,     AVG((julianday(pwt.consultation_end_time) - julianday(pwt.consultation_start_time)) * 24 * 60) AS average_consultation_time_minutes FROM      patient_wait_times pwt GROUP BY      pwt.hospital_id;","[('CGH', 25.011638289503754), ('KKH', 25.385951163992285), ('SGH', 24.62880607880652), ('SHP', 25.005431661196052), ('SKH', 24.25375781133771)]","Based on the provided SQL result from the `patient_wait_times` (pwt) table using columns `hospital_id`, `consultation_start_time`, and `consultation_end_time`, the average consultation time in minutes for each hospital's patient is as follows:
+
+- CGH: 25.01 minutes
+- KKH: 25.39 minutes
+- SGH: 24.63 minutes
+- SHP: 25.01 minutes
+- SKH: 24.25 minutes
+
+These averages are calculated from the consultation times recorded in the `patient_wait_times` table for each respective hospital identified by their unique `hospital_id`.",29.85,None
+6,How many inpatient cases that required surgery also had followups?, SELECT COUNT(ic.patient_id) AS num_inpatient_cases_with_surgery_and_followup FROM Inpatient_Cases ic JOIN surgery_metrics sm ON ic.patient_id = sm.patient_id WHERE ic.follow_up_date IS NOT NULL;,"[(277,)]","Based on the provided SQL result, there are 277 inpatient cases that required surgery and had follow-ups. The data is derived from the `Inpatient_Cases` (alias ic) and `surgery_metrics` (alias sm) tables using the columns `ic.patient_id`, `sm.patient_id`, and `ic.follow_up_date`.",24.4,None
+7,What percentage of incidents involving patients over the age of 60 required surgeries?, SELECT      (COUNT(DISTINCT pi.patient_id) * 100.0 / (SELECT COUNT(*) FROM patient_incidents WHERE age > 60)) AS percentage_of_surgeries FROM      patient_incidents pi JOIN      surgery_metrics sm ON pi.patient_id = sm.patient_id WHERE      pi.age > 60;,"[(18.556701030927837,)]","Based on the provided SQL result, 18.56% of incidents involving patients over 60 years old required surgeries. The calculation is derived from the `patient_incidents` table using the columns `patient_id` and `age`, as well as the `surgery_metrics` table with the column `patient_id`.",25.49,None
+8,Which departments have the longest average surgery durations and also the highest average length of stay? Are these concentrated in specific hospitals?," SELECT department, AVG(duration) AS avg_duration FROM surgery_metrics GROUP BY department ORDER BY avg_duration DESC;","[('Cardiothoracic', 273.0689655172414), ('Thoracic', 268.05), ('Neurosurgery', 266.0740740740741), ('Colorectal', 234.64935064935065), ('Orthopedics', 176.46825396825398), ('General', 89.43820224719101)]","Based on the provided SQL result from the `surgery_metrics` table using columns `department` and `duration`, the departments with the longest average surgery durations are as follows:
+
+1. Cardiothoracic: 273.0689655172414 minutes
+2. Thoracic: 268.05 minutes
+3. Neurosurgery: 266.0740740740741 minutes
+
+The SQL query and result provided do not include data on the average length of stay or hospital concentration for these departments, so those aspects cannot be addressed with the given information.",38.83,None
+9,What is the average wait time from registration to consultation across hospitals  and how does it vary by department for outpatient cases?, SELECT AVG(julianday(consultation_start_time) - julianday(registration_time)) AS avg_wait_time FROM patient_wait_times;,"[(0.03402118055173196,)]","Based on the SQL result from the `patient_wait_times` table using columns `consultation_start_time` and `registration_time`, the average wait time from registration to consultation across hospitals is approximately 0.82 hours (or about 49 minutes). This calculation was derived from the difference in Julian day numbers between the `consultation_start_time` and `registration_time`.
+
+However, the provided SQL query and result do not cover the variation of wait times by department for outpatient cases as requested in the question. Therefore, this aspect of the inquiry cannot be addressed with the given information.
+
+To summarize:
+- Average wait time from registration to consultation across hospitals: approximately 49 minutes.
+- The question regarding the variation of wait times by department for outpatient cases cannot be answered based on the provided SQL query and result.",30.6,None
+10,"Among patients over 60 years old who had surgeries,  which hospital and department combinations have the highest post-surgery readmission rates within 30 days? "," SELECT      sm.hospital,      sm.department,     COUNT(CASE WHEN sm.readmission_within_30_days THEN 1 ELSE NULL END) * 1.0 / COUNT(*) AS readmission_rate FROM      patient_incidents pi JOIN      surgery_metrics sm ON pi.patient_id = sm.patient_id WHERE      pi.age > 60 GROUP BY      sm.hospital,      sm.department ORDER BY      readmission_rate DESC;","[('KKH', 'Colorectal', 0.5), ('CGH', 'Cardiothoracic', 0.0), ('CGH', 'General', 0.0), ('KKH', 'Neurosurgery', 0.0), ('SGH', 'General', 0.0), ('SGH', 'Neurosurgery', 0.0), ('SGH', 'Orthopedics', 0.0)]","Based on the provided SQL result from tables `patient_incidents` (columns: `patient_id`, `age`) and `surgery_metrics` (columns: `hospital`, `department`, `readmission_within_30_days`, `patient_id`), we have identified that among patients over 60 years old who had surgeries, the highest post-surgery readmission rate within 30 days is observed at KKH's Colorectal department with a readmission rate of 50%. All other hospital and department combinations listed did not experience any readmissions within 30 days for this age group.",28.66,None
+11,"What is the patient satisfaction score for each department or doctor, and how does it correlate with wait time or length of stay?",N/A,N/A,"To address the user's query, which asks for patient satisfaction scores for each department or doctor and how these correlate with wait times or length of stay, we need several pieces of information that are currently not present in the provided database schema:
+
+1. **Patient Satisfaction Scores**: The current schema does not include any table or column that records patient satisfaction scores. This is a critical piece of data needed to answer the first part of the question.
+
+2. **Correlation with Wait Times and Length of Stay**:
+   - For wait times, there's a `patient_wait_times` table which captures various timestamps related to an outpatient visit. However, this information alone does not correlate directly with satisfaction scores unless those scores are recorded.
+   - For length of stay, the `Inpatient_Cases` table contains admission and discharge dates (`admission_date`, `discharge_date`) from which the length of stay can be calculated for inpatients. The `surgery_metrics` table also includes a `length_of_stay` field specifically for surgical cases.
+
+To clarify with the user:
+- **Clarification on Data Availability**: Confirm if patient satisfaction scores are available and, if so, where they might be stored or recorded.
+- **Clarify Scope of Inquiry**:
+  - Are we looking at inpatient cases, outpatient visits, or both?
+  - Do they want to focus specifically on surgical cases (where length of stay is more relevant) or all types of cases?
+  - Is the correlation with wait times limited to outpatient scenarios only?
+
+To proceed effectively, you would need a table that records patient satisfaction scores along with other identifying information such as `patient_id`, `department`, and/or `primary_doctor_id`. Once this data is available, you could then correlate these scores with wait times (from `patient_wait_times` for outpatients) or length of stay (calculated from admission/discharge dates in `Inpatient_Cases`).
+
+If the user can provide additional details about where satisfaction scores are recorded or if they need to be collected as part of a new data collection effort, this would help in forming an actionable plan.",28.1,None
+12,How long were patients hospitalised after surgery on average?, SELECT AVG(length_of_stay) AS avg_length_of_stay FROM surgery_metrics;,"[(3.956,)]","The average length_of_stay for patients after surgery, as recorded in the `surgery_metrics` table under the `length_of_stay` column, is approximately 3.956 days.",18.97,None

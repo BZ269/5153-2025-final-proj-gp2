@@ -1,0 +1,10 @@
+SELECT COUNT(*) AS patient_incident_count FROM patient_incidents;	bt5153_gp
+SELECT COUNT(*) AS no_treatment_plan_cases FROM Inpatient_Cases WHERE treatment_plan IS NULL OR treatment_plan = 'None';	bt5153_gp
+SELECT      hospital_id,     AVG(bill_amount) AS average_bill_amount FROM      Outpatient_Cases GROUP BY      hospital_id;	bt5153_gp
+SELECT      CAST(SUM(CASE WHEN outcomes = 'Successful' THEN 1 ELSE 0 END) AS DECIMAL(5,2)) / COUNT(*) * 100 AS success_rate_percentage FROM      surgery_metrics;	bt5153_gp
+SELECT      oc.hospital_id,     AVG(julianday(consultation_end_time) - julianday(consultation_start_time)) * 24 * 60 AS average_consultation_time_in_minutes FROM      Outpatient_Cases oc JOIN      patient_wait_times pwt ON oc.patient_id = pwt.patient_id GROUP BY      oc.hospital_id;	bt5153_gp
+SELECT COUNT(*) AS number_of_cases FROM Inpatient_Cases ic JOIN surgery_metrics sm ON ic.patient_id = sm.patient_id LEFT JOIN Inpatient_Cases followup_ic ON ic.patient_id = followup_ic.patient_id AND followup_ic.follow_up_date IS NOT NULL;	bt5153_gp
+SELECT COUNT(CASE WHEN pi.age > 60 THEN 1 ELSE NULL END) * 100.0 / COUNT(*) AS percentage FROM Inpatient_Cases ic JOIN patient_incidents pi ON ic.patient_id = pi.patient_id LEFT JOIN surgery_metrics sm ON ic.patient_id = sm.patient_id WHERE pi.incident_type LIKE '%surgery%';	bt5153_gp
+SELECT * FROM * ; bt5153_gp
+SELECT      AVG(julianday(consultation_start_time) - julianday(registration_time)) AS avg_wait_time,     department FROM      patient_wait_times pwt JOIN      Outpatient_Cases oc ON pwt.patient_id = oc.patient_id GROUP BY      department;	bt5153_gp
+SELECT * FROM * ; bt5153_gp

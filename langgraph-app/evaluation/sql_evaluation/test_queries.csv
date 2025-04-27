@@ -1,0 +1,13 @@
+test_query
+How many patients incidents are there?
+How many inpatient cases had no treatment plan?
+What is the average billing amount from each hospital's outpatient cases?
+What is the percentage of successful surgeries rount off to second decimal?
+What is the average consultation time in minutes for each hospital's patient?
+How many inpatient cases that required surgery also had followups?
+What percentage of incidents involving patients over the age of 60 required surgeries?
+Which departments have the longest average surgery durations and also the highest average length of stay? Are these concentrated in specific hospitals?
+What is the average wait time from registration to consultation across hospitals  and how does it vary by department for outpatient cases?
+"Among patients over 60 years old who had surgeries,  which hospital and department combinations have the highest post-surgery readmission rates within 30 days? "
+"What is the patient satisfaction score for each department or doctor, and how does it correlate with wait time or length of stay?"
+How long were patients hospitalised after surgery on average?

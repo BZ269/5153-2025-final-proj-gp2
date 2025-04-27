@@ -1,0 +1,10 @@
+SELECT COUNT(*) FROM patient_incidents;
+SELECT COUNT(*)  FROM Inpatient_Cases  WHERE treatment_plan IS NULL;
+SELECT hospital_id, AVG(bill_amount) FROM Outpatient_Cases GROUP BY hospital_id;
+SELECT ROUND(SUM(CASE WHEN outcomes = 'Successful' THEN 1 ELSE 0 END) * 100.0 / COUNT(outcomes), 2)  FROM surgery_metrics;
+SELECT      pwt.hospital_id,     AVG(pwt.consultation_end_time - pwt.consultation_start_time) / INTERVAL '1 minute' FROM      patient_wait_times pwt GROUP BY      pwt.hospital_id;
+SELECT COUNT(*)  FROM Inpatient_Cases ic JOIN surgery_metrics sm ON ic.patient_id = sm.patient_id LEFT JOIN patient_incidents pi ON ic.patient_id = pi.patient_id WHERE ic.case_type = 'Inpatient' AND pi.incident_type = 'surgery' AND pi.follow_up_date IS NOT NULL;
+SELECT      (COUNT(s.surgery_id) * 100.0 / COUNT(pi.patient_id)) FROM      patient_incidents pi JOIN      surgery_metrics s ON pi.patient_id = s.patient_id WHERE      pi.age > 60 AND s.procedure_type = 'Surgery';
+SELECT      department,     AVG(duration),     AVG(length_of_stay) FROM      surgery_metrics GROUP BY      department HAVING      AVG(duration) = (         SELECT MAX(avg_duration)         FROM (             SELECT AVG(duration)             FROM surgery_metrics             GROUP BY department         ) subquery     ) AND      AVG(length_of_stay) = (         SELECT MAX(avg_lost)         FROM (             SELECT AVG(length_of_stay)             FROM surgery_metrics             GROUP BY department         ) subquery2     ) ORDER BY      department;
+SELECT      h.hospital_id,     d.department,     AVG(w.total_time_in_facility - w.registration_time) FROM      Outpatient_Cases o JOIN      patient_wait_times w ON o.patient_id = w.patient_id AND o.hospital_id = w.hospital_id JOIN      hospitals h ON o.hospital_id = h.hospital_id JOIN      departments d ON o.department = d.department GROUP BY      h.hospital_id, d.department;
+SELECT s.hospital, s.department, COUNT(*) FROM surgery_metrics s JOIN Inpatient_Cases ic ON s.patient_id = ic.patient_id WHERE ic.age > 60 AND s.readmission_within_30_days = TRUE GROUP BY s.hospital, s.department ORDER BY readmission_count DESC;

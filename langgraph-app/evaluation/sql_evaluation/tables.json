@@ -1,0 +1,676 @@
+[
+  {
+    "db_id": "bt5153_gp",
+    "table_names_original": [
+      "Inpatient_Cases",
+      "Outpatient_Cases",
+      "patient_incidents",
+      "patient_wait_times",
+      "surgery_metrics"
+    ],
+    "table_names": [
+      "inpatient cases",
+      "outpatient cases",
+      "patient incidents",
+      "patient wait times",
+      "surgery metrics"
+    ],
+    "column_names_original": [
+      [
+        -1,
+        "*"
+      ],
+      [
+        0,
+        "patient_id"
+      ],
+      [
+        0,
+        "hospital_id"
+      ],
+      [
+        0,
+        "department"
+      ],
+      [
+        0,
+        "primary_doctor_id"
+      ],
+      [
+        0,
+        "case_type"
+      ],
+      [
+        0,
+        "admission_date"
+      ],
+      [
+        0,
+        "discharge_date"
+      ],
+      [
+        0,
+        "diagnosis"
+      ],
+      [
+        0,
+        "treatment_plan"
+      ],
+      [
+        0,
+        "medications"
+      ],
+      [
+        0,
+        "follow_up_date"
+      ],
+      [
+        0,
+        "notes"
+      ],
+      [
+        0,
+        "bill_amount"
+      ],
+      [
+        0,
+        "payment_status"
+      ],
+      [
+        0,
+        "insurance_claim_id"
+      ],
+      [
+        0,
+        "created_at"
+      ],
+      [
+        0,
+        "updated_at"
+      ],
+      [
+        1,
+        "patient_id"
+      ],
+      [
+        1,
+        "hospital_id"
+      ],
+      [
+        1,
+        "department"
+      ],
+      [
+        1,
+        "primary_doctor_id"
+      ],
+      [
+        1,
+        "case_type"
+      ],
+      [
+        1,
+        "visit_date"
+      ],
+      [
+        1,
+        "diagnosis"
+      ],
+      [
+        1,
+        "treatment_plan"
+      ],
+      [
+        1,
+        "medications"
+      ],
+      [
+        1,
+        "follow_up_date"
+      ],
+      [
+        1,
+        "notes"
+      ],
+      [
+        1,
+        "bill_amount"
+      ],
+      [
+        1,
+        "payment_status"
+      ],
+      [
+        1,
+        "insurance_claim_id"
+      ],
+      [
+        1,
+        "created_at"
+      ],
+      [
+        1,
+        "updated_at"
+      ],
+      [
+        2,
+        "patient_id"
+      ],
+      [
+        2,
+        "age"
+      ],
+      [
+        2,
+        "gender"
+      ],
+      [
+        2,
+        "incident_type"
+      ],
+      [
+        2,
+        "incident_date"
+      ],
+      [
+        2,
+        "incident_time"
+      ],
+      [
+        3,
+        "patient_id"
+      ],
+      [
+        3,
+        "hospital_id"
+      ],
+      [
+        3,
+        "appointment_time"
+      ],
+      [
+        3,
+        "registration_time"
+      ],
+      [
+        3,
+        "triage_time"
+      ],
+      [
+        3,
+        "consultation_start_time"
+      ],
+      [
+        3,
+        "consultation_end_time"
+      ],
+      [
+        3,
+        "billing_time"
+      ],
+      [
+        3,
+        "pharmacy_wait_time"
+      ],
+      [
+        3,
+        "total_time_in_facility"
+      ],
+      [
+        4,
+        "surgery_id"
+      ],
+      [
+        4,
+        "patient_id"
+      ],
+      [
+        4,
+        "procedure_type"
+      ],
+      [
+        4,
+        "surgeon"
+      ],
+      [
+        4,
+        "date_time"
+      ],
+      [
+        4,
+        "duration"
+      ],
+      [
+        4,
+        "blood_loss"
+      ],
+      [
+        4,
+        "transfusion_volume"
+      ],
+      [
+        4,
+        "complications"
+      ],
+      [
+        4,
+        "outcomes"
+      ],
+      [
+        4,
+        "length_of_stay"
+      ],
+      [
+        4,
+        "readmission_within_30_days"
+      ],
+      [
+        4,
+        "hospital"
+      ],
+      [
+        4,
+        "department"
+      ],
+      [
+        4,
+        "anesthesia_type"
+      ],
+      [
+        4,
+        "asa_class"
+      ],
+      [
+        4,
+        "is_emergency"
+      ],
+      [
+        4,
+        "surgical_team_size"
+      ]
+    ],
+    "column_names": [
+      [
+        -1,
+        "*"
+      ],
+      [
+        0,
+        "patient id"
+      ],
+      [
+        0,
+        "hospital id"
+      ],
+      [
+        0,
+        "department"
+      ],
+      [
+        0,
+        "primary doctor id"
+      ],
+      [
+        0,
+        "case type"
+      ],
+      [
+        0,
+        "admission date"
+      ],
+      [
+        0,
+        "discharge date"
+      ],
+      [
+        0,
+        "diagnosis"
+      ],
+      [
+        0,
+        "treatment plan"
+      ],
+      [
+        0,
+        "medications"
+      ],
+      [
+        0,
+        "follow up date"
+      ],
+      [
+        0,
+        "notes"
+      ],
+      [
+        0,
+        "bill amount"
+      ],
+      [
+        0,
+        "payment status"
+      ],
+      [
+        0,
+        "insurance claim id"
+      ],
+      [
+        0,
+        "created at"
+      ],
+      [
+        0,
+        "updated at"
+      ],
+      [
+        1,
+        "patient id"
+      ],
+      [
+        1,
+        "hospital id"
+      ],
+      [
+        1,
+        "department"
+      ],
+      [
+        1,
+        "primary doctor id"
+      ],
+      [
+        1,
+        "case type"
+      ],
+      [
+        1,
+        "visit date"
+      ],
+      [
+        1,
+        "diagnosis"
+      ],
+      [
+        1,
+        "treatment plan"
+      ],
+      [
+        1,
+        "medications"
+      ],
+      [
+        1,
+        "follow up date"
+      ],
+      [
+        1,
+        "notes"
+      ],
+      [
+        1,
+        "bill amount"
+      ],
+      [
+        1,
+        "payment status"
+      ],
+      [
+        1,
+        "insurance claim id"
+      ],
+      [
+        1,
+        "created at"
+      ],
+      [
+        1,
+        "updated at"
+      ],
+      [
+        2,
+        "patient id"
+      ],
+      [
+        2,
+        "age"
+      ],
+      [
+        2,
+        "gender"
+      ],
+      [
+        2,
+        "incident type"
+      ],
+      [
+        2,
+        "incident date"
+      ],
+      [
+        2,
+        "incident time"
+      ],
+      [
+        3,
+        "patient id"
+      ],
+      [
+        3,
+        "hospital id"
+      ],
+      [
+        3,
+        "appointment time"
+      ],
+      [
+        3,
+        "registration time"
+      ],
+      [
+        3,
+        "triage time"
+      ],
+      [
+        3,
+        "consultation start time"
+      ],
+      [
+        3,
+        "consultation end time"
+      ],
+      [
+        3,
+        "billing time"
+      ],
+      [
+        3,
+        "pharmacy wait time"
+      ],
+      [
+        3,
+        "total time in facility"
+      ],
+      [
+        4,
+        "surgery id"
+      ],
+      [
+        4,
+        "patient id"
+      ],
+      [
+        4,
+        "procedure type"
+      ],
+      [
+        4,
+        "surgeon"
+      ],
+      [
+        4,
+        "date time"
+      ],
+      [
+        4,
+        "duration"
+      ],
+      [
+        4,
+        "blood loss"
+      ],
+      [
+        4,
+        "transfusion volume"
+      ],
+      [
+        4,
+        "complications"
+      ],
+      [
+        4,
+        "outcomes"
+      ],
+      [
+        4,
+        "length of stay"
+      ],
+      [
+        4,
+        "readmission within 30 days"
+      ],
+      [
+        4,
+        "hospital"
+      ],
+      [
+        4,
+        "department"
+      ],
+      [
+        4,
+        "anesthesia type"
+      ],
+      [
+        4,
+        "asa class"
+      ],
+      [
+        4,
+        "is emergency"
+      ],
+      [
+        4,
+        "surgical team size"
+      ]
+    ],
+    "column_types": [
+      "text",
+      "number",
+      "text",
+      "text",
+      "text",
+      "text",
+      "time",
+      "time",
+      "text",
+      "text",
+      "text",
+      "time",
+      "text",
+      "number",
+      "text",
+      "text",
+      "time",
+      "time",
+      "number",
+      "text",
+      "text",
+      "text",
+      "text",
+      "time",
+      "text",
+      "text",
+      "text",
+      "time",
+      "text",
+      "number",
+      "text",
+      "text",
+      "time",
+      "time",
+      "number",
+      "number",
+      "text",
+      "text",
+      "time",
+      "time",
+      "number",
+      "text",
+      "time",
+      "time",
+      "time",
+      "time",
+      "time",
+      "time",
+      "number",
+      "number",
+      "text",
+      "number",
+      "text",
+      "text",
+      "time",
+      "number",
+      "number",
+      "number",
+      "text",
+      "text",
+      "number",
+      "others",
+      "text",
+      "text",
+      "text",
+      "number",
+      "others",
+      "number"
+    ],
+    "primary_keys": [
+      1,
+      18,
+      34,
+      40,
+      50
+    ],
+    "foreign_keys": [
+      [
+        [
+          "patient_incidents",
+          "patient_id"
+        ],
+        [
+          "Inpatient_Cases",
+          "patient_id"
+        ]
+      ],
+      [
+        [
+          "patient_wait_times",
+          "patient_id"
+        ],
+        [
+          "Outpatient_Cases",
+          "patient_id"
+        ]
+      ],
+      [
+        [
+          "surgery_metrics",
+          "patient_id"
+        ],
+        [
+          "Inpatient_Cases",
+          "patient_id"
+        ]
+      ]
+    ]
+  }
+]

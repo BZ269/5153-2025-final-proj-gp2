@@ -1,0 +1,5 @@
+query_group,test_query,project_codes,ground_truth
+Similar Project Identification,"Has anyone done a QIP on reducing fall risk through mobility signage, toileting routines, or high fall-risk ward designation?","SHM_CO005, SHM_RM001, SHM_RM044, SHM_RM052","Fall prevention projects such as SHM_CO005, SHM_RM001, SHM_RM044, and SHM_RM052 used interventions like mobility signage, elimination rounds, high-fall-risk ward allocation, and visual reminders."
+Evaluation & Metrics,What metrics were commonly used to evaluate fall prevention interventions?,"SHM_RM012, SHM_RM045, SHM_RM053, SHM_RM054, SHM_RM055","Fall prevention projects used patient-day-based fall rate as the core metric."
+Implementation Strategy,What was the impact of introducing Tango commodes and fall champions on fall rates in OCH?,SHM_RM044,"SHM_RM044 introduced Tango commodes and fall champions in OCH, which contributed to a reduction in fall rate from 1.15 to 0.80 per 1,000 patient days."
+What are the most successful fall prevention projects? 
